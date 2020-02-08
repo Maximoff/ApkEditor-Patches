@@ -95,11 +95,6 @@ public class NoUpdates
 				else if (subDir.getName().equals("res"))
 				{
 					replacer(subDir, xmlFilter);
-					replacer(subDir, otherFilter);
-				}
-				else
-				{
-					replacer(subDir, otherFilter);
 				}
 			}
 		}
