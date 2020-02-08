@@ -14,8 +14,10 @@ public class NoUpdates
 {
 	private String vName;
 	private String vCode;
+	private String vCodeHex;
 	private String newName;
 	private String newCode;
+	private String newCodeHex;
 	private FileFilter dirFilter;
 	private FilenameFilter smaliFilter;
 	private FilenameFilter xmlFilter;
@@ -40,6 +42,8 @@ public class NoUpdates
 		}
 		if (parseParam(rootDir))
 		{
+			vCodeHex = "0x" + Integer.toHexString(Integer.parseInt(vCode));
+			newCodeHex = "0x" + Integer.toHexString(Integer.parseInt(newCode));
 			dirFilter = new FileFilter()
 			{
 				@Override
@@ -111,10 +115,14 @@ public class NoUpdates
 				String content = readToString(file, false);
 				if (content == null)
 					continue;
-				content = content.replace("\"" + vName + "\"", "\"" + newName + "\"").replace("\"" + vCode + "\"", "\"" + newCode + "\"");
+				content = content.replace("\"" + vName + "\"", "\"" + newName + "\"").replace("\"" + vCode + "\"", "\"" + newCode + "\"").replaceAll(vName + "((\\s+)?(\\w+|\\()(\\s+)?)" + vCode, newName + "$1" + newCode);
 				if (filter == xmlFilter)
 				{
 					content = content.replace(">" + vName + "<", ">" + newName + "<").replace(">" + vCode + "<", ">" + newCode + "<");
+				}
+				if (filter == smaliFilter)
+				{
+					content = content.replaceAll("((const|const/16) ((v|p)\\d+), " + vCodeHex + ")\\s", "$1 #Maximoff. Возможный номер сборки! Заменить на: const $3, " + newCodeHex + "\n");
 				}
 				writeToFile(file, content);
 			}
@@ -200,7 +208,9 @@ public class NoUpdates
 			{
 				response.append(line).append("\n");
 				if (!contains)
-					contains = (line.indexOf(vCode) >= 0 || line.indexOf(vCode) >= 0);
+				{
+					contains = (line.indexOf(vCode) >= 0 || line.indexOf(vCode) >= 0 || line.indexOf(vCodeHex) >= 0);
+				}
 			}
 			return (contains ? response.toString() : null);
 		}
