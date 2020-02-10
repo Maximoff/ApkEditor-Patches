@@ -1,3 +1,6 @@
+// Патч изменяет версию и номер сборки приложения
+// © Maximoff, 2020
+
 package ru.maximoff.patch;
 
 import java.io.BufferedReader;
