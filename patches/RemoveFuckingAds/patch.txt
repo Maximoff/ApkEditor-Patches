@@ -1,0 +1,26 @@
+[MIN_ENGINE_VER]
+2
+
+[AUTHOR]
+Maximoff
+
+[PACKAGE]
+*
+
+[EXECUTE_DEX]
+SCRIPT:
+    code.dex
+SMALI_NEEDED:
+    true
+MAIN_CLASS:
+    ru.maximoff.patch.RemoveFuckingAds
+ENTRANCE:
+    patch
+[/EXECUTE_DEX]
+
+[ADD_FILES]
+SOURCE:
+    RemoveFuckingAds.smali
+TARGET:
+    smali/remove/fucking/ads/RemoveFuckingAds.smali
+[/ADD_FILES]

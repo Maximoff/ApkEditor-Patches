@@ -1,0 +1,22 @@
+[MIN_ENGINE_VER]
+2
+
+[AUTHOR]
+Maximoff
+
+[PACKAGE]
+*
+
+# В "PARAM" можно задать желаемую версию и код сборки через запятую: "версия,код".
+[EXECUTE_DEX]
+SCRIPT:
+    code.dex
+SMALI_NEEDED:
+    true
+MAIN_CLASS:
+    ru.maximoff.patch.NoUpdates
+ENTRANCE:
+    patch
+PARAM:
+    999999999,999999999
+[/EXECUTE_DEX]
