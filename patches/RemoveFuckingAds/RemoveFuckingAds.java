@@ -10,11 +10,18 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.regex.Pattern;
 
 public class RemoveFuckingAds
 {
-	private final String[] checkAds = {
+	private String[] checkAds = {
 		"/adbuddiz/",
 		"/adcolony/",
 		"/addapptr/",
@@ -144,12 +151,12 @@ public class RemoveFuckingAds
 		"@id/banner_layout",
 		"com.google.android.gms.ads.AdView"
 	};
-	private final String[] smaliPatterns = {
+	private String[] smaliPatterns = {
 		"invoke-.*Lcom/google/android/gms/(internal|ads).*;->addView\\([^\\)]*\\)V",
 		"invoke-.*(/adbuddiz/|/adcolony/|/addapptr/|/adjust/|/adincube/|/adknowledge/|/admarvel/|/admob/|/ads/|/adsdk/|/adserver/adview/|/aerserv/|/airpush/|/altamob/|/appAdForce/|/appbrain/|/appenda/|/applovin/|/appnext/|/appnexus/|/appodeal/|/appia/|/apprupt/|/apsalar/|/avocarrot/|/boxdigital/sdk/ad/|/branch/|/chartboost/|/crashlytics/|/duapps/ad|/fabric/|/flurry/|/fyber/|/google/android/gms/internal/|/greystripe/|/heyzap/|/hyprmx/|/inmobi/|/inneractive/|/instreamatic/|/integralads/|/ironsource/|/jirbo/|/jumptap/|/kochava/|/Leadbolt/|/localytics/|/loopme/|/madsdk/|/mdotm/|/mediabrix/|/millennialmedia/|/mngads/|/moat/|/mobclix/|/mobfox/sdk/|/mobvista/|/mologiq/analytics/|/moolah/|/montexi/|/mopub/|/my/target/|/nexage/|/onelouder/adlib/|/openx/|psm/advertising/|/pubmatic/|/revmob/|/shark/adsert/|/smaato/SOMA/|/smartadserver/|/startapp/|/tagmanager/|/tapjoy/|/unity3d/ads|/vdopia/|/vungle/|/xtify/android/sdk/|/zestadz/android/|ad/AdmobInterstitial|ad/AdmobNative|ads/FullAdmob|NativeAdViewAdmob|InlineAd|/NativeInterstitial|ru/boxdigital/sdk/ad/).*->(hasVideoContent|addHtmlAdView|admob|animateAdView|bannerAdmobMainActivity|beginFetchAds|canBeUsed|displayDownloadImageAlert|doBannerClick|downloadAndDisplayImage|expandAd|fetchAd|forceShowInterstitial|handleShow|incrementMetric|initBanner|initializeAds|initializeAdSDK|internalLoadAd|load|loadAd|loadAdFromBid|loadAds|loadAssetIntoView|loadBanner|loadBannerAd|loadBanners|loadBlocksInfo|loadChildAds|loadCustomEvent|loadData|loadDataWithBaseURL|loadDoAfterService|loadFromServer|loadFullscreen|loadHtml|loadHtmlResponse|loadImages|loadImageView|loadIncentivizedAd|loadInterstitial|loadInterstitialAd|loadList|loadMidPoint|loadNativeAd|loadNativeAds|loadNextAd|loadNextMediatedAd|loadNonJavascript|loadRewardedVideo|loadUrl|loadVideo|loadVideoAds|loadVideoUrl|mraidVideoAddendumInterstitialShow|nativeAdLoaded|onEvent|playVideo|preload|preloadAd|preloadHtml|preloadNativeAdImage|preloadUrl|pushAdsToPool|refreshAds|requestAd|requestBannerAd|requestInterstitial|requestInterstitialAd|setNativeAppwallBanner|setupBanner|shouldShowInterstitial|show|showAd|showAds|showAdInActivity|showAdinternal|showAndRender|showAsInterstitial|showBanner|showBannerAbsolute|showBannerInPlaceholder|showContent|showCustomEventInterstitial|showFullscreen|showIncentivizedAd|showInterstitial|showInterstitialAd|showOfferWall|showMoPubBrowserForUrl|showNativeContentAdView|showNativeAppInstallAdView|showPopup|showPopupExit|showPoststitial|showPreparedVideoFallbackAd|showSplash|showVideo|showWebPage|startAdLoadUponLayout|startMetric|submitAndResetMetrics|isLoading|uploadReports)\\(.*\\)(V|Z)",
 		"\"ca-app-pub-\\d+(/|~)\\d+\"|\".*doubleclick\\.net.*\"|\".*googleadservices\\.com.*\"|\".*pagead/ads.*\"|\".*googleads.*\"|\".*ad\\.doubleclick\\.net.*\"|\"https?://unrcv\\.adkmob\\.com/rp/.*\"|\"https?://www\\.googleapis\\.com/auth/games.*\"|\"https?://sb-ssl\\.google\\.com/safebrowsing/clientreport/malware.*\"|\"https?://proton\\.flurry\\.com/sdk/v1/config.*\"|\"https?://.*applovin\\.com.*\"|\"https?://ach\\.appodeal\\.com/api/v0/android/crashes.*\"|\"https?://ad\\.mail\\.ru/mobile.*\"|\"https?://analytics\\.mopub\\.com/i/jot/exchange_client_event.*\"|\"https?://api\\.pubnative\\.net/api/partner/v2/promotions/native/video.*\"|\"https?://certificate\\.mobile\\.yandex\\.net/api/v1/pins.*\"|\"https?://code\\.google\\.com/p/android/issues/detail?id=.*\"|\"https?://data\\.flurry\\.com.*\"|\"https?://dwxjayoxbnyrr\\.cloudfront\\.net/amazon-ads\\.viewablejs.*\"|\"https?://e\\.crashlytics\\.com/spi/v2/events.*\"|\"https?://impact\\.applifier\\.com/mobile/campaigns.*\"|\"https?://impact.staging\\.applifier\\.com/mobile/campaigns.*\"|\"https?://live\\.chartboost\\.com.*\"|\"https?://pagead2\\.googlesyndication\\.com/pagead/gen_204.*\"|\"https?://r\\.my\\.com/mobile.*\"|\"https?://rri\\.appodeal\\.com/api/stat.*\"|\"https?://s3\\.amazonaws\\.com/appodeal-externallibs/android/ima3\\.js\\.*\"|\"https?://settings\\.crashlytics\\.com/spi/v2/platforms/android/apps/%s/settings.*\"|\"https?://www\\.mopub\\.com.*\"|\"https?://startup\\.mobile\\.yandex\\.net/\"|\"https?://ad\\.mail\\.ru/mobile/\"|\"https?://r\\.my\\.com/mobile/\"|\"https?://i\\.l\\.inmobicdn\\.net/sdk/sdk/500/android/mraid\\.js\""
 	};
-	private final String[] smaliReplacement = {
+	private String[] smaliReplacement = {
 		"invoke-static {}, Lremove/fucking/ads/RemoveFuckingAds;->a()V #Remove-Fucking-Ads",
 		"invoke-static {}, Lremove/fucking/ads/RemoveFuckingAds;->a()$3 #Remove-Fucking-Ads",
 		"\"Remove-Fucking-Ads\" #Remove-Fucking-Ads"
@@ -174,6 +181,14 @@ public class RemoveFuckingAds
     public void patch(String apkPath, String patchPath, String decodePath, String param)
 	{
         File rootDir = new File(decodePath);
+		try
+		{
+			getRules(new File(patchPath));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 		dirFilter = new FileFilter()
 		{
 			@Override
@@ -311,6 +326,83 @@ public class RemoveFuckingAds
 		{
 			e.printStackTrace();
 		}
+	}
+
+	private void getRules(File patchFile) throws Exception
+	{
+        ZipFile zip = new ZipFile(patchFile);
+        Enumeration e = zip.entries();
+        while (e.hasMoreElements())
+		{
+            ZipEntry entry = (ZipEntry) e.nextElement();
+			if (entry.getName().equals("rules.txt"))
+			{
+				InputStream is = zip.getInputStream(entry);
+				try
+				{
+					List<String> rules = parseRules(zip.getInputStream(entry));
+					if (!rules.isEmpty())
+					{
+						mergeRules(rules);
+					}
+				}
+				finally
+				{
+					is.close();
+				}
+			}
+        }
+	}
+
+	private List<String> parseRules(InputStream input)
+	{
+		List<String> result = new ArrayList<String>();
+		try
+		{
+			String line;
+			BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+			while ((line = reader.readLine()) != null)
+			{
+				line = line.trim();
+				if (!line.startsWith("#") && !line.equals(""))
+					result.add(line);
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	private void mergeRules(List<String> rules)
+	{
+		String[] newCheckAds = new String[checkAds.length + rules.size()];
+		for (int i = 0; i < checkAds.length; i++)
+		{
+			newCheckAds[i] = checkAds[i];
+		}
+		String pattern = "\".*(";
+		for (int i = 0; i < rules.size(); i++)
+		{
+			if (i > 0)
+				pattern += "|";
+			pattern += Pattern.quote(rules.get(i));
+			newCheckAds[i + checkAds.length] = rules.get(i);
+		}
+		pattern += ").*\"";
+		String[] newSmaliPatterns = new String[smaliPatterns.length + 1];
+		String[] newSmaliReplacement = new String[smaliPatterns.length + 1];
+		for (int i = 0; i < smaliPatterns.length; i++)
+		{
+			newSmaliPatterns[i] = smaliPatterns[i];
+			newSmaliReplacement[i] = smaliReplacement[i];
+		}
+		newSmaliPatterns[smaliPatterns.length] = pattern;
+		newSmaliReplacement[smaliPatterns.length] = "\"Remove-Fucking-Ads\" #Remove-Fucking-Ads";
+		checkAds = newCheckAds;
+		smaliPatterns = newSmaliPatterns;
+		smaliReplacement = newSmaliReplacement;
 	}
 }
 
