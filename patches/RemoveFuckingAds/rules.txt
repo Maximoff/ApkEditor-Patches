@@ -3,7 +3,37 @@
 # Найденные строки будут заменены в smali (только в smali!) на "Remove-Fucking-Ads".
 # Каждую новую строку следует писать с новой строчки.
 # НЕ ИСПОЛЬЗУЙТЕ РЕГУЛЯРНЫЕ ВЫРАЖЕНИЯ! Они не поддерживаются.
-# Ниже пара примеров
 
-example.com
-/exampleAdsPath/
+ca-app-pub-
+doubleclick.net
+googleadservices.com
+pagead/ads
+googleads
+ad.doubleclick.net
+://unrcv.adkmob.com/rp/
+://www.googleapis.com/auth/games
+://sb-ssl.google.com/safebrowsing/clientreport/malware
+://proton.flurry.com/sdk/v1/config
+://applovin.com
+://ach.appodeal.com/api/v0/android/crashes
+://ad.mail.ru/mobile
+://analytics.mopub.com/i/jot/exchange_client_event
+://api.pubnative.net/api/partner/v2/promotions/native/video
+://certificate.mobile.yandex.net/api/v1/pins
+://code.google.com/p/android/issues/detail?id=
+://data.flurry.com
+://dwxjayoxbnyrr.cloudfront.net/amazon-ads.viewablejs
+://e.crashlytics.com/spi/v2/events
+://impact.applifier.com/mobile/campaigns
+://impact.staging.applifier.com/mobile/campaigns
+://live.chartboost.com
+://pagead2.googlesyndication.com/pagead/gen_204
+://r.my.com/mobile
+://rri.appodeal.com/api/stat
+://s3.amazonaws.com/appodeal-externallibs/android/ima3.js
+://settings.crashlytics.com/spi/v2/platforms/android/apps/%s/settings
+://www.mopub.com
+://startup.mobile.yandex.net/
+://ad.mail.ru/mobile/
+://r.my.com/mobile/
+://i.l.inmobicdn.net/sdk/sdk/500/android/mraid.js

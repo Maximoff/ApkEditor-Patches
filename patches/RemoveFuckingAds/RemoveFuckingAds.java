@@ -1,5 +1,5 @@
 // Патч для удаления рекламы
-// Требуется файл RemoveFuckingAds.smali
+// Требуется файлы RemoveFuckingAds.smali и rules.txt
 // © Maximoff, 2020
 
 package ru.maximoff.patch;
@@ -109,38 +109,6 @@ public class RemoveFuckingAds
 		"/NativeInterstitial",
 		"ru/boxdigital/sdk/ad/",
 		"ca-app-pub",
-		"doubleclick.net",
-		"googleadservices.com",
-		"pagead/ads",
-		"googleads",
-		"ad.doubleclick.net",
-		"//unrcv.adkmob.com/rp/",
-		"//www.googleapis.com/auth/games",
-		"//sb-ssl.google.com/safebrowsing/clientreport/malware",
-		"//proton.flurry.com/sdk/v1/config",
-		"applovin.com",
-		"//ach.appodeal.com/api/v0/android/crashes",
-		"//ad.mail.ru/mobile",
-		"//analytics.mopub.com/i/jot/exchange_client_event",
-		"//api.pubnative.net/api/partner/v2/promotions/native/video",
-		"//certificate.mobile.yandex.net/api/v1/pins",
-		"//code.google.com/p/android/issues/detail?id=",
-		"//data.flurry.com",
-		"//dwxjayoxbnyrr.cloudfront.net/amazon-ads.viewablejs",
-		"//e.crashlytics.com/spi/v2/events",
-		"//impact.applifier.com/mobile/campaigns",
-		"//impact.staging.applifier.com/mobile/campaigns",
-		"//live.chartboost.com",
-		"//pagead2.googlesyndication.com/pagead/gen_204",
-		"//r.my.com/mobile",
-		"//rri.appodeal.com/api/stat",
-		"//s3.amazonaws.com/appodeal-externallibs/android/ima3.js",
-		"//settings.crashlytics.com/spi/v2/platforms/android/apps/%s/settings",
-		"//www.mopub.com",
-		"//startup.mobile.yandex.net/",
-		"//ad.mail.ru/mobile/",
-		"//r.my.com/mobile/",
-		"//i.l.inmobicdn.net/sdk/sdk/500/android/mraid.js",
 		"@id/adlayout",
 		"@id/adslayout",
 		"@id/adviewlayout",
@@ -153,13 +121,11 @@ public class RemoveFuckingAds
 	};
 	private String[] smaliPatterns = {
 		"invoke-.*Lcom/google/android/gms/(internal|ads).*;->addView\\([^\\)]*\\)V",
-		"invoke-.*(/adbuddiz/|/adcolony/|/addapptr/|/adjust/|/adincube/|/adknowledge/|/admarvel/|/admob/|/ads/|/adsdk/|/adserver/adview/|/aerserv/|/airpush/|/altamob/|/appAdForce/|/appbrain/|/appenda/|/applovin/|/appnext/|/appnexus/|/appodeal/|/appia/|/apprupt/|/apsalar/|/avocarrot/|/boxdigital/sdk/ad/|/branch/|/chartboost/|/crashlytics/|/duapps/ad|/fabric/|/flurry/|/fyber/|/google/android/gms/internal/|/greystripe/|/heyzap/|/hyprmx/|/inmobi/|/inneractive/|/instreamatic/|/integralads/|/ironsource/|/jirbo/|/jumptap/|/kochava/|/Leadbolt/|/localytics/|/loopme/|/madsdk/|/mdotm/|/mediabrix/|/millennialmedia/|/mngads/|/moat/|/mobclix/|/mobfox/sdk/|/mobvista/|/mologiq/analytics/|/moolah/|/montexi/|/mopub/|/my/target/|/nexage/|/onelouder/adlib/|/openx/|psm/advertising/|/pubmatic/|/revmob/|/shark/adsert/|/smaato/SOMA/|/smartadserver/|/startapp/|/tagmanager/|/tapjoy/|/unity3d/ads|/vdopia/|/vungle/|/xtify/android/sdk/|/zestadz/android/|ad/AdmobInterstitial|ad/AdmobNative|ads/FullAdmob|NativeAdViewAdmob|InlineAd|/NativeInterstitial|ru/boxdigital/sdk/ad/).*->(hasVideoContent|addHtmlAdView|admob|animateAdView|bannerAdmobMainActivity|beginFetchAds|canBeUsed|displayDownloadImageAlert|doBannerClick|downloadAndDisplayImage|expandAd|fetchAd|forceShowInterstitial|handleShow|incrementMetric|initBanner|initializeAds|initializeAdSDK|internalLoadAd|load|loadAd|loadAdFromBid|loadAds|loadAssetIntoView|loadBanner|loadBannerAd|loadBanners|loadBlocksInfo|loadChildAds|loadCustomEvent|loadData|loadDataWithBaseURL|loadDoAfterService|loadFromServer|loadFullscreen|loadHtml|loadHtmlResponse|loadImages|loadImageView|loadIncentivizedAd|loadInterstitial|loadInterstitialAd|loadList|loadMidPoint|loadNativeAd|loadNativeAds|loadNextAd|loadNextMediatedAd|loadNonJavascript|loadRewardedVideo|loadUrl|loadVideo|loadVideoAds|loadVideoUrl|mraidVideoAddendumInterstitialShow|nativeAdLoaded|onEvent|playVideo|preload|preloadAd|preloadHtml|preloadNativeAdImage|preloadUrl|pushAdsToPool|refreshAds|requestAd|requestBannerAd|requestInterstitial|requestInterstitialAd|setNativeAppwallBanner|setupBanner|shouldShowInterstitial|show|showAd|showAds|showAdInActivity|showAdinternal|showAndRender|showAsInterstitial|showBanner|showBannerAbsolute|showBannerInPlaceholder|showContent|showCustomEventInterstitial|showFullscreen|showIncentivizedAd|showInterstitial|showInterstitialAd|showOfferWall|showMoPubBrowserForUrl|showNativeContentAdView|showNativeAppInstallAdView|showPopup|showPopupExit|showPoststitial|showPreparedVideoFallbackAd|showSplash|showVideo|showWebPage|startAdLoadUponLayout|startMetric|submitAndResetMetrics|isLoading|uploadReports)\\(.*\\)(V|Z)",
-		"\"ca-app-pub-\\d+(/|~)\\d+\"|\".*doubleclick\\.net.*\"|\".*googleadservices\\.com.*\"|\".*pagead/ads.*\"|\".*googleads.*\"|\".*ad\\.doubleclick\\.net.*\"|\"https?://unrcv\\.adkmob\\.com/rp/.*\"|\"https?://www\\.googleapis\\.com/auth/games.*\"|\"https?://sb-ssl\\.google\\.com/safebrowsing/clientreport/malware.*\"|\"https?://proton\\.flurry\\.com/sdk/v1/config.*\"|\"https?://.*applovin\\.com.*\"|\"https?://ach\\.appodeal\\.com/api/v0/android/crashes.*\"|\"https?://ad\\.mail\\.ru/mobile.*\"|\"https?://analytics\\.mopub\\.com/i/jot/exchange_client_event.*\"|\"https?://api\\.pubnative\\.net/api/partner/v2/promotions/native/video.*\"|\"https?://certificate\\.mobile\\.yandex\\.net/api/v1/pins.*\"|\"https?://code\\.google\\.com/p/android/issues/detail?id=.*\"|\"https?://data\\.flurry\\.com.*\"|\"https?://dwxjayoxbnyrr\\.cloudfront\\.net/amazon-ads\\.viewablejs.*\"|\"https?://e\\.crashlytics\\.com/spi/v2/events.*\"|\"https?://impact\\.applifier\\.com/mobile/campaigns.*\"|\"https?://impact.staging\\.applifier\\.com/mobile/campaigns.*\"|\"https?://live\\.chartboost\\.com.*\"|\"https?://pagead2\\.googlesyndication\\.com/pagead/gen_204.*\"|\"https?://r\\.my\\.com/mobile.*\"|\"https?://rri\\.appodeal\\.com/api/stat.*\"|\"https?://s3\\.amazonaws\\.com/appodeal-externallibs/android/ima3\\.js\\.*\"|\"https?://settings\\.crashlytics\\.com/spi/v2/platforms/android/apps/%s/settings.*\"|\"https?://www\\.mopub\\.com.*\"|\"https?://startup\\.mobile\\.yandex\\.net/\"|\"https?://ad\\.mail\\.ru/mobile/\"|\"https?://r\\.my\\.com/mobile/\"|\"https?://i\\.l\\.inmobicdn\\.net/sdk/sdk/500/android/mraid\\.js\""
+		"invoke-.*(/adbuddiz/|/adcolony/|/addapptr/|/adjust/|/adincube/|/adknowledge/|/admarvel/|/admob/|/ads/|/adsdk/|/adserver/adview/|/aerserv/|/airpush/|/altamob/|/appAdForce/|/appbrain/|/appenda/|/applovin/|/appnext/|/appnexus/|/appodeal/|/appia/|/apprupt/|/apsalar/|/avocarrot/|/boxdigital/sdk/ad/|/branch/|/chartboost/|/crashlytics/|/duapps/ad|/fabric/|/flurry/|/fyber/|/google/android/gms/internal/|/greystripe/|/heyzap/|/hyprmx/|/inmobi/|/inneractive/|/instreamatic/|/integralads/|/ironsource/|/jirbo/|/jumptap/|/kochava/|/Leadbolt/|/localytics/|/loopme/|/madsdk/|/mdotm/|/mediabrix/|/millennialmedia/|/mngads/|/moat/|/mobclix/|/mobfox/sdk/|/mobvista/|/mologiq/analytics/|/moolah/|/montexi/|/mopub/|/my/target/|/nexage/|/onelouder/adlib/|/openx/|psm/advertising/|/pubmatic/|/revmob/|/shark/adsert/|/smaato/SOMA/|/smartadserver/|/startapp/|/tagmanager/|/tapjoy/|/unity3d/ads|/vdopia/|/vungle/|/xtify/android/sdk/|/zestadz/android/|ad/AdmobInterstitial|ad/AdmobNative|ads/FullAdmob|NativeAdViewAdmob|InlineAd|/NativeInterstitial|ru/boxdigital/sdk/ad/).*->(hasVideoContent|addHtmlAdView|admob|animateAdView|bannerAdmobMainActivity|beginFetchAds|canBeUsed|displayDownloadImageAlert|doBannerClick|downloadAndDisplayImage|expandAd|fetchAd|forceShowInterstitial|handleShow|incrementMetric|initBanner|initializeAds|initializeAdSDK|internalLoadAd|load|loadAd|loadAdFromBid|loadAds|loadAssetIntoView|loadBanner|loadBannerAd|loadBanners|loadBlocksInfo|loadChildAds|loadCustomEvent|loadData|loadDataWithBaseURL|loadDoAfterService|loadFromServer|loadFullscreen|loadHtml|loadHtmlResponse|loadImages|loadImageView|loadIncentivizedAd|loadInterstitial|loadInterstitialAd|loadList|loadMidPoint|loadNativeAd|loadNativeAds|loadNextAd|loadNextMediatedAd|loadNonJavascript|loadRewardedVideo|loadUrl|loadVideo|loadVideoAds|loadVideoUrl|mraidVideoAddendumInterstitialShow|nativeAdLoaded|onEvent|playVideo|preload|preloadAd|preloadHtml|preloadNativeAdImage|preloadUrl|pushAdsToPool|refreshAds|requestAd|requestBannerAd|requestInterstitial|requestInterstitialAd|setNativeAppwallBanner|setupBanner|shouldShowInterstitial|show|showAd|showAds|showAdInActivity|showAdinternal|showAndRender|showAsInterstitial|showBanner|showBannerAbsolute|showBannerInPlaceholder|showContent|showCustomEventInterstitial|showFullscreen|showIncentivizedAd|showInterstitial|showInterstitialAd|showOfferWall|showMoPubBrowserForUrl|showNativeContentAdView|showNativeAppInstallAdView|showPopup|showPopupExit|showPoststitial|showPreparedVideoFallbackAd|showSplash|showVideo|showWebPage|startAdLoadUponLayout|startMetric|submitAndResetMetrics|isLoading|uploadReports)\\(.*\\)(V|Z)"
 	};
 	private String[] smaliReplacement = {
-		"invoke-static {}, Lremove/fucking/ads/RemoveFuckingAds;->a()V #Remove-Fucking-Ads",
-		"invoke-static {}, Lremove/fucking/ads/RemoveFuckingAds;->a()$3 #Remove-Fucking-Ads",
-		"\"Remove-Fucking-Ads\" #Remove-Fucking-Ads"
+		"invoke-static {}, Lremove/fucking/ads/RemoveFuckingAds;->a()V #Remove-Fucking-Ads; Original: $0",
+		"invoke-static {}, Lremove/fucking/ads/RemoveFuckingAds;->a()$3 #Remove-Fucking-Ads; Original: $0"
 	};
 	private final String[] xmlPatterns = {
 		"<([^>]+)(android:id=\"@id/(?i)((ads?|banner|adview)_?layout)\")([^>]+)android:layout_width=\"[^\"]+ent\"([^>]+)android:layout_height=\"[^\"]+ent\"",
@@ -382,7 +348,7 @@ public class RemoveFuckingAds
 		{
 			newCheckAds[i] = checkAds[i];
 		}
-		String pattern = "\".*(";
+		String pattern = "\"[^\"]*(";
 		for (int i = 0; i < rules.size(); i++)
 		{
 			if (i > 0)
@@ -390,7 +356,7 @@ public class RemoveFuckingAds
 			pattern += Pattern.quote(rules.get(i));
 			newCheckAds[i + checkAds.length] = rules.get(i);
 		}
-		pattern += ").*\"";
+		pattern += ")[^\"]*\"";
 		String[] newSmaliPatterns = new String[smaliPatterns.length + 1];
 		String[] newSmaliReplacement = new String[smaliPatterns.length + 1];
 		for (int i = 0; i < smaliPatterns.length; i++)
@@ -399,7 +365,7 @@ public class RemoveFuckingAds
 			newSmaliReplacement[i] = smaliReplacement[i];
 		}
 		newSmaliPatterns[smaliPatterns.length] = pattern;
-		newSmaliReplacement[smaliPatterns.length] = "\"Remove-Fucking-Ads\" #Remove-Fucking-Ads";
+		newSmaliReplacement[smaliPatterns.length] = "\"Remove-Fucking-Ads\" #Remove-Fucking-Ads; Original: $0";
 		checkAds = newCheckAds;
 		smaliPatterns = newSmaliPatterns;
 		smaliReplacement = newSmaliReplacement;
