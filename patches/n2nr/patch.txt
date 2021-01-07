@@ -1,0 +1,22 @@
+[MIN_ENGINE_VER]
+2
+
+[AUTHOR]
+Maximoff
+
+[PACKAGE]
+*
+
+# В "PARAM" надо задать относительный путь к файлу, можно несколько файлов через ":"
+[EXECUTE_DEX]
+SCRIPT:
+    code.dex
+SMALI_NEEDED:
+    true
+MAIN_CLASS:
+    ru.maximoff.patch.n2rn
+ENTRANCE:
+    patch
+PARAM:
+    assets/test.txt:assets/test2.txt
+[/EXECUTE_DEX]
