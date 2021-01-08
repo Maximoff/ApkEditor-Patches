@@ -15,13 +15,54 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import java.util.regex.Pattern;
+import java.util.concurrent.TimeUnit;
 
-public class RemoveFuckingAds
+public class RemoveFuckingAds implements Runnable
 {
-	private String[] checkAds = {
+
+	private FilenameFilter mFilter;
+
+	private File mFile;
+
+	private ExecutorService mThreadService;
+
+	@Override
+	public void run()
+	{
+		String content = readToString(mFile);
+		if (content == null)
+			return;
+		String str = content;
+
+		if (mFilter == smaliFilter)
+		{
+
+			for (int i = 0; i < smaliPatterns.length; i++)
+			{
+				content = content.replaceAll(smaliPatterns[i], smaliReplacement[i]);
+			}
+
+		}
+		else
+		{
+			for (int i = 0; i < xmlPatterns.length; i++)
+			{
+				content = content.replaceAll(xmlPatterns[i], xmlReplacement[i]);
+			}
+		}
+
+		if (str != content)
+			writeToFile(mFile, content);
+	}
+
+
+
+	private static String[] checkAds = {
 		"/adbuddiz/",
 		"/adcolony/",
 		"/addapptr/",
@@ -119,33 +160,40 @@ public class RemoveFuckingAds
 		"@id/banner_layout",
 		"com.google.android.gms.ads.AdView"
 	};
-	private String[] smaliPatterns = {
+	private static String[] smaliPatterns = {
 		"invoke-.*Lcom/google/android/gms/(internal|ads).*;->addView\\([^\\)]*\\)V",
 		"invoke-.*(/adbuddiz/|/adcolony/|/addapptr/|/adjust/|/adincube/|/adknowledge/|/admarvel/|/admob/|/ads/|/adsdk/|/adserver/adview/|/aerserv/|/airpush/|/altamob/|/appAdForce/|/appbrain/|/appenda/|/applovin/|/appnext/|/appnexus/|/appodeal/|/appia/|/apprupt/|/apsalar/|/avocarrot/|/boxdigital/sdk/ad/|/branch/|/chartboost/|/crashlytics/|/duapps/ad|/fabric/|/flurry/|/fyber/|/google/android/gms/internal/|/greystripe/|/heyzap/|/hyprmx/|/inmobi/|/inneractive/|/instreamatic/|/integralads/|/ironsource/|/jirbo/|/jumptap/|/kochava/|/Leadbolt/|/localytics/|/loopme/|/madsdk/|/mdotm/|/mediabrix/|/millennialmedia/|/mngads/|/moat/|/mobclix/|/mobfox/sdk/|/mobvista/|/mologiq/analytics/|/moolah/|/montexi/|/mopub/|/my/target/|/nexage/|/onelouder/adlib/|/openx/|psm/advertising/|/pubmatic/|/revmob/|/shark/adsert/|/smaato/SOMA/|/smartadserver/|/startapp/|/tagmanager/|/tapjoy/|/unity3d/ads|/vdopia/|/vungle/|/xtify/android/sdk/|/zestadz/android/|ad/AdmobInterstitial|ad/AdmobNative|ads/FullAdmob|NativeAdViewAdmob|InlineAd|/NativeInterstitial|ru/boxdigital/sdk/ad/).*->(hasVideoContent|addHtmlAdView|admob|animateAdView|bannerAdmobMainActivity|beginFetchAds|canBeUsed|displayDownloadImageAlert|doBannerClick|downloadAndDisplayImage|expandAd|fetchAd|forceShowInterstitial|handleShow|incrementMetric|initBanner|initializeAds|initializeAdSDK|internalLoadAd|load|loadAd|loadAdFromBid|loadAds|loadAssetIntoView|loadBanner|loadBannerAd|loadBanners|loadBlocksInfo|loadChildAds|loadCustomEvent|loadData|loadDataWithBaseURL|loadDoAfterService|loadFromServer|loadFullscreen|loadHtml|loadHtmlResponse|loadImages|loadImageView|loadIncentivizedAd|loadInterstitial|loadInterstitialAd|loadList|loadMidPoint|loadNativeAd|loadNativeAds|loadNextAd|loadNextMediatedAd|loadNonJavascript|loadRewardedVideo|loadUrl|loadVideo|loadVideoAds|loadVideoUrl|mraidVideoAddendumInterstitialShow|nativeAdLoaded|onEvent|playVideo|preload|preloadAd|preloadHtml|preloadNativeAdImage|preloadUrl|pushAdsToPool|refreshAds|requestAd|requestBannerAd|requestInterstitial|requestInterstitialAd|setNativeAppwallBanner|setupBanner|shouldShowInterstitial|show|showAd|showAds|showAdInActivity|showAdinternal|showAndRender|showAsInterstitial|showBanner|showBannerAbsolute|showBannerInPlaceholder|showContent|showCustomEventInterstitial|showFullscreen|showIncentivizedAd|showInterstitial|showInterstitialAd|showOfferWall|showMoPubBrowserForUrl|showNativeContentAdView|showNativeAppInstallAdView|showPopup|showPopupExit|showPoststitial|showPreparedVideoFallbackAd|showSplash|showVideo|showWebPage|startAdLoadUponLayout|startMetric|submitAndResetMetrics|isLoading|uploadReports)\\(.*\\)(V|Z)"
 	};
-	private String[] smaliReplacement = {
+	private static String[] smaliReplacement = {
 		"invoke-static {}, Lremove/fucking/ads/RemoveFuckingAds;->a()V #Remove-Fucking-Ads; Original: $0",
 		"invoke-static {}, Lremove/fucking/ads/RemoveFuckingAds;->a()$3 #Remove-Fucking-Ads; Original: $0"
 	};
-	private final String[] xmlPatterns = {
+	private static final String[] xmlPatterns = {
 		"<([^>]+)(android:id=\"@id/(?i)((ads?|banner|adview)_?layout)\")([^>]+)android:layout_width=\"[^\"]+ent\"([^>]+)android:layout_height=\"[^\"]+ent\"",
 		"<com\\.google\\.android\\.gms\\.ads\\.AdView([^>]+)android:layout_width=\"[^\"]+ent\"([^>]+)android:layout_height=\"[^\"]+ent\"",
 		"ca-app-pub"
 	};
-	private final String[] xmlReplacement = {
+	private static final String[] xmlReplacement = {
 		"<!-- #Remove-Fucking-Ads -->\n<$1$2$5android:layout_width=\"0dip\"$6android:layout_height=\"0dip\"",
 		"<!-- #Remove-Fucking-Ads -->\n<com.google.android.gms.ads.AdView$1android:layout_width=\"0dip\"$2android:layout_height=\"0dip\"",
 		"Remove-Fucking-Ads"
 	};
-	private FileFilter dirFilter;
-	private FilenameFilter smaliFilter;
-	private FilenameFilter xmlFilter;
+	private static FileFilter dirFilter;
+	private static FilenameFilter smaliFilter;
+	private static FilenameFilter xmlFilter;
 
     public RemoveFuckingAds()
 	{}
 
+	public RemoveFuckingAds(File f, FilenameFilter filter)
+	{
+		this.mFile = f;
+		this.mFilter = filter;
+	}
+
     public void patch(String apkPath, String patchPath, String decodePath, String param)
 	{
+		mThreadService = Executors.newFixedThreadPool(8);
         File rootDir = new File(decodePath);
 		try
 		{
@@ -180,6 +228,16 @@ public class RemoveFuckingAds
 			}
 		};
 		startReplacing(rootDir);
+
+		mThreadService.shutdown();
+
+		try
+		{
+			while (!mThreadService.awaitTermination(1, TimeUnit.SECONDS))
+			{}
+		}
+		catch (InterruptedException e)
+		{}
     }
 
 	private void startReplacing(File rootDir)
@@ -209,32 +267,17 @@ public class RemoveFuckingAds
 		}
 	}
 
+
 	private void replacer(File dir, FilenameFilter filter)
 	{
 		File[] files = dir.listFiles(filter);
 		File[] subDirs = dir.listFiles(dirFilter);
 		if (files != null)
 		{
+
 			for (File file : files)
 			{
-				String content = readToString(file);
-				if (content == null)
-					continue;
-				if (filter == smaliFilter)
-				{
-					for (int i = 0; i < smaliPatterns.length; i++)
-					{
-						content = content.replaceAll(smaliPatterns[i], smaliReplacement[i]);
-					}
-				}
-				else
-				{
-					for (int i = 0; i < xmlPatterns.length; i++)
-					{
-						content = content.replaceAll(xmlPatterns[i], xmlReplacement[i]);
-					}
-				}
-				writeToFile(file, content);
+				mThreadService.submit(new RemoveFuckingAds(file, filter));
 			}
 		}
 		if (subDirs != null)
@@ -244,9 +287,11 @@ public class RemoveFuckingAds
 				replacer(subDir, filter);
 			}
 		}
+
 	}
 
-    private String readToString(File file)
+
+    private synchronized String readToString(File file)
 	{
 		try
 		{
@@ -280,12 +325,13 @@ public class RemoveFuckingAds
 		return null;
 	}
 
-	private void writeToFile(File file, String string)
+	private synchronized void writeToFile(File file, String string)
 	{
 		try
 		{
 			FileOutputStream fos = new FileOutputStream(file);
 			fos.write(string.getBytes("UTF-8"));
+			fos.flush();
 			fos.close();
 		}
 		catch (Exception e)
@@ -371,4 +417,3 @@ public class RemoveFuckingAds
 		smaliReplacement = newSmaliReplacement;
 	}
 }
-
